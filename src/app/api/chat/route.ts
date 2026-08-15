@@ -10,7 +10,7 @@ const uiSchemaDefinition: Schema = {
   properties: {
     type: { 
       type: Type.STRING, 
-      description: "The component type. Must be one of: Container, Text, Card, MetricCard, BarChart, LineChart, AreaChart, ScatterChart, RadarChart, PieChart, DataGrid." 
+      description: "The component type. Must be one of: Container, Text, Card, MetricCard, InsightCallout, ProgressBar, Badge, Divider, BarChart, LineChart, AreaChart, ScatterChart, RadarChart, PieChart, DataGrid." 
     },
     props: {
       type: Type.OBJECT,
@@ -51,6 +51,10 @@ export async function POST(req: NextRequest) {
       Use 'Container' for layout (props: {'direction': 'vertical' | 'horizontal', 'gap': '1rem' etc}).
       Use 'Text' for descriptions (props: {'content': '...', 'variant': 'h1'|'h2'|'h3'|'p'}).
       Use 'Card' to wrap groups of information nicely.
+      Use 'InsightCallout' to highlight important findings. Props: {'title': '...', 'description': '...', 'type': 'info'|'warning'}.
+      Use 'ProgressBar' to show progress or percentages. Props: {'label': '...', 'value': 75, 'max': 100}.
+      Use 'Badge' for small tags. Props: {'text': '...', 'variant': 'primary'|'secondary'}.
+      Use 'Divider' to visually separate sections.
       Use 'BarChart', 'LineChart', 'AreaChart', 'PieChart' for visualizations. Props must include 'xAxisKey' (string) and 'yAxisKeys' (list of strings).
       Use 'ScatterChart' for correlations. Props must include 'xAxisKey' and 'yAxisKey'.
       Use 'RadarChart' for comparative multivariate data. Props must include 'angleAxisKey' and 'radarAxisKeys' (list of strings).

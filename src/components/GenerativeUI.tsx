@@ -40,6 +40,39 @@ const componentDictionary: Record<string, React.FC<any>> = {
       <div className="font-headline-lg text-headline-lg font-bold text-on-surface">{value}</div>
     </div>
   ),
+  InsightCallout: ({ title, description, type = 'info' }) => {
+    const bgColor = type === 'warning' ? 'bg-error-container text-on-error-container border-error' : 'bg-primary-container text-on-primary-container border-primary';
+    const icon = type === 'warning' ? 'warning' : 'lightbulb';
+    return (
+      <div className={`rounded-xl border p-md flex items-start gap-3 ${bgColor} my-2`}>
+        <span className="material-symbols-outlined mt-1">{icon}</span>
+        <div>
+          <h4 className="font-title-md font-bold">{title}</h4>
+          <p className="font-body-md mt-1 opacity-90">{description}</p>
+        </div>
+      </div>
+    );
+  },
+  ProgressBar: ({ label, value, max = 100 }) => (
+    <div className="w-full my-2">
+      <div className="flex justify-between mb-1">
+        <span className="font-label-md text-on-surface-variant">{label}</span>
+        <span className="font-label-md text-on-surface font-bold">{value} / {max}</span>
+      </div>
+      <div className="w-full bg-surface-container rounded-full h-2.5">
+        <div className="bg-primary h-2.5 rounded-full" style={{ width: `${Math.min((value / max) * 100, 100)}%` }}></div>
+      </div>
+    </div>
+  ),
+  Badge: ({ text, variant = 'primary' }) => {
+    const styles = variant === 'secondary' ? 'bg-secondary-container text-on-secondary-container' : 'bg-primary-container text-on-primary-container';
+    return (
+      <span className={`px-2.5 py-0.5 rounded-full text-label-sm font-bold ${styles} inline-block mx-1`}>
+        {text}
+      </span>
+    );
+  },
+  Divider: () => <hr className="border-t border-outline-variant my-4 w-full" />,
   BarChart: ({ data, xAxisKey, yAxisKeys = [] }) => (
     <div className="w-full h-[300px] mt-4">
       <ResponsiveContainer width="100%" height="100%">
