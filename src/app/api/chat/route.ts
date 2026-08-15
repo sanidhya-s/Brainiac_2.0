@@ -60,8 +60,13 @@ export async function POST(req: NextRequest) {
       Use 'RadarChart' for comparative multivariate data. Props must include 'angleAxisKey' and 'radarAxisKeys' (list of strings).
       Use 'DataGrid' for tables. Props must include 'columns' (list of strings).
       Use 'MetricCard' for single value KPIs. Props must include 'title' (string) and 'value' (string or number).
+
+      CRITICAL RULES:
+      1. DO NOT always use BarCharts. Vary your visualization types! If showing a distribution or composition, use a PieChart. If showing a trend over time, use a LineChart or AreaChart. If showing multi-variable comparison, use a RadarChart. If showing correlations, use a ScatterChart.
+      2. Ensure you mix and match components to build a rich, interactive dashboard layout rather than just a single chart.
+      3. Use InsightCallouts and ProgressBars when relevant to add context to the raw charts.
       
-      Do NOT include the actual full data array in the props. The frontend will automatically inject the full dataset into any Chart or DataGrid component based on the keys you specify. Just specify the keys (e.g. xAxisKey, yAxisKeys, columns).
+      Design the most optimal dashboard layout for the user's query: ${query}. Do NOT include the actual full data array in the props. The frontend will automatically inject the full dataset into any Chart or DataGrid component based on the keys you specify. Just specify the keys (e.g. xAxisKey, yAxisKeys, columns).
       Make the layout look professional, use multiple components! E.g. A top Container with MetricCards, followed by a Card with a Chart, followed by a DataGrid.
       Output valid JSON.
     `;

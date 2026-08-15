@@ -60,8 +60,9 @@ export default function Home() {
       // Use setTimeout to allow UI to re-render before blocking the main thread
       setTimeout(async () => {
         try {
-          const bstr = evt.target?.result;
-          const wb = XLSX.read(bstr, { type: "binary" });
+          const arrayBuffer = evt.target?.result as ArrayBuffer;
+          const dataArray = new Uint8Array(arrayBuffer);
+          const wb = XLSX.read(dataArray, { type: "array" });
           const wsname = wb.SheetNames[0];
           const ws = wb.Sheets[wsname];
           const jsonData = XLSX.utils.sheet_to_json(ws);
@@ -84,7 +85,7 @@ export default function Home() {
       }, 50);
     };
     
-    reader.readAsBinaryString(file);
+    reader.readAsArrayBuffer(file);
   };
 
   const handleSend = async (overrideQuery?: string) => {
@@ -124,9 +125,9 @@ export default function Home() {
   };
 
   return (
-    <div className="bg-background text-on-background font-body-md text-body-md antialiased pb-20 md:pb-0 min-h-screen">
-      {/* TopAppBar */}
-      <header className="docked full-width top-0 bg-surface text-primary border-b border-outline-variant transition-colors duration-200 ease-in-out flex justify-between items-center w-full px-4 h-16 sticky z-40 shadow-sm">
+    <div className="bg-gradient-to-br from-background via-surface to-background text-on-background font-body-md text-body-md antialiased pb-20 md:pb-0 min-h-screen selection:bg-primary selection:text-on-primary">
+      {/* TopAppBar with Glassmorphism */}
+      <header className="docked full-width top-0 bg-surface/80 backdrop-blur-md text-primary border-b border-outline-variant/50 transition-colors duration-200 ease-in-out flex justify-between items-center w-full px-4 h-16 sticky z-50 shadow-sm">
         <div className="flex items-center gap-3">
           <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-on-primary font-bold">
             U
@@ -174,11 +175,11 @@ export default function Home() {
       <main className="p-margin-mobile md:p-margin-desktop space-y-lg max-w-[1440px] mx-auto mt-6">
         
         {/* Ask AI Query Bar */}
-        <section className="sticky top-[80px] z-30 bg-background pb-4 pt-2">
-          <div className="relative w-full rounded-full bg-surface-container-lowest border border-outline-variant shadow-md focus-within:border-primary focus-within:ring-2 focus-within:ring-primary-fixed transition-all duration-300 flex items-center p-2 pl-4">
-            <span className="material-symbols-outlined text-primary">smart_toy</span>
+        <section className="sticky top-[80px] z-40 pb-4 pt-2">
+          <div className="relative w-full max-w-4xl mx-auto rounded-full bg-surface-container-lowest/90 backdrop-blur-md border border-outline-variant shadow-lg hover:shadow-xl focus-within:border-primary focus-within:ring-4 focus-within:ring-primary/20 transition-all duration-300 flex items-center p-2 pl-6 group">
+            <span className="material-symbols-outlined text-primary text-[28px] group-focus-within:animate-pulse">smart_toy</span>
             <input 
-              className="w-full bg-transparent border-none focus:outline-none text-body-lg text-on-surface ml-3 placeholder-on-surface-variant" 
+              className="w-full bg-transparent border-none focus:outline-none text-body-lg text-on-surface ml-4 placeholder-on-surface-variant/70 font-medium" 
               placeholder={data.length === 0 ? "Upload data first to ask questions..." : "Ask Lumina anything about your data..."} 
               type="text"
               value={query}
@@ -189,7 +190,7 @@ export default function Home() {
             <button 
               onClick={() => handleSend()}
               disabled={data.length === 0 || isProcessing}
-              className="bg-primary text-on-primary rounded-full p-2.5 hover:bg-primary-container hover:text-on-primary-container transition-colors shadow-sm ml-2 flex items-center justify-center disabled:opacity-50"
+              className="bg-primary text-on-primary rounded-full p-3 hover:bg-primary-container hover:text-on-primary-container hover:scale-105 active:scale-95 transition-all shadow-md ml-2 flex items-center justify-center disabled:opacity-50 disabled:hover:scale-100"
             >
               {isProcessing ? (
                 <span className="material-symbols-outlined text-[20px] animate-spin">sync</span>
@@ -218,11 +219,11 @@ export default function Home() {
         </section>
 
         {/* Dynamic Report Canvas */}
-        <div ref={reportRef} className="space-y-xl bg-background pb-12">
+        <div ref={reportRef} className="space-y-xl pb-12 relative">
           {chatHistory.length > 0 ? (
             chatHistory.map((chat, idx) => (
-              <section key={idx} className="bg-surface-container-lowest border border-outline-variant rounded-xl p-lg shadow-sm animate-in fade-in zoom-in duration-300">
-                <div className="flex justify-between items-start mb-md border-b border-outline-variant pb-4">
+              <section key={idx} className="bg-surface-container-lowest/80 backdrop-blur-sm border border-outline-variant/60 rounded-2xl p-lg shadow-lg hover:shadow-xl transition-all duration-300 animate-in fade-in slide-in-from-bottom-4 zoom-in-95">
+                <div className="flex justify-between items-start mb-md border-b border-outline-variant/50 pb-4">
                   <div>
                     <h4 className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-1">Your Question</h4>
                     <h2 className="font-headline-md text-headline-md text-on-surface flex items-center gap-2">
