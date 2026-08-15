@@ -14,6 +14,8 @@ export default function Home() {
   const [chatHistory, setChatHistory] = useState<{ query: string, aiData: AIResponse }[]>([]);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [isProcessing, setIsProcessing] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<number | null>(null);
+  const [uploadStatus, setUploadStatus] = useState<string>("");
   
   const fileInputRef = useRef<HTMLInputElement>(null);
   const reportRef = useRef<HTMLDivElement>(null);
@@ -39,17 +41,49 @@ export default function Home() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    setUploadProgress(0);
+    setUploadStatus("Reading file...");
+
     const reader = new FileReader();
-    reader.onload = async (evt) => {
-      const bstr = evt.target?.result;
-      const wb = XLSX.read(bstr, { type: "binary" });
-      const wsname = wb.SheetNames[0];
-      const ws = wb.Sheets[wsname];
-      const jsonData = XLSX.utils.sheet_to_json(ws);
-      setData(jsonData);
-      setChatHistory([]);
-      await fetchSuggestions(jsonData);
+    
+    reader.onprogress = (evt) => {
+      if (evt.lengthComputable) {
+        const percentLoaded = Math.round((evt.loaded / evt.total) * 100);
+        setUploadProgress(percentLoaded);
+      }
     };
+
+    reader.onload = (evt) => {
+      setUploadProgress(100);
+      setUploadStatus("Parsing and processing data (this may take a moment)...");
+      
+      // Use setTimeout to allow UI to re-render before blocking the main thread
+      setTimeout(async () => {
+        try {
+          const bstr = evt.target?.result;
+          const wb = XLSX.read(bstr, { type: "binary" });
+          const wsname = wb.SheetNames[0];
+          const ws = wb.Sheets[wsname];
+          const jsonData = XLSX.utils.sheet_to_json(ws);
+          setData(jsonData);
+          setChatHistory([]);
+          
+          setUploadStatus("Generating AI suggestions...");
+          await fetchSuggestions(jsonData);
+          
+          setUploadProgress(null);
+          setUploadStatus("");
+        } catch (error) {
+          console.error(error);
+          setUploadStatus("Error processing file.");
+          setTimeout(() => {
+            setUploadProgress(null);
+            setUploadStatus("");
+          }, 3000);
+        }
+      }, 50);
+    };
+    
     reader.readAsBinaryString(file);
   };
 
@@ -262,10 +296,26 @@ export default function Home() {
                   <div className="flex justify-between items-center mb-md">
                     <h2 className="font-headline-md text-headline-md text-on-surface">Upload Data to Begin</h2>
                   </div>
-                  <div className="w-full h-48 bg-surface-container rounded-lg border border-outline-variant border-dashed flex flex-col justify-center items-center text-on-surface-variant">
-                    <Upload size={32} className="mb-2 opacity-50" />
-                    <p>Awaiting dataset for Generative UI analysis...</p>
-                  </div>
+                  {uploadProgress !== null ? (
+                    <div className="w-full h-48 bg-surface-container rounded-lg border border-outline-variant flex flex-col justify-center items-center text-on-surface p-6">
+                      <span className="material-symbols-outlined text-[48px] text-primary animate-pulse mb-4">cloud_upload</span>
+                      <h3 className="font-title-md font-bold text-center">{uploadStatus}</h3>
+                      <div className="w-full max-w-md bg-surface-container-high rounded-full h-3 mt-4 overflow-hidden border border-outline-variant">
+                        <div 
+                          className="bg-primary h-3 rounded-full transition-all duration-300 ease-out" 
+                          style={{ width: `${uploadProgress}%` }}
+                        ></div>
+                      </div>
+                      <p className="font-label-sm text-on-surface-variant mt-2 text-center">
+                        {uploadProgress < 100 ? `${uploadProgress}% uploaded` : "Please wait..."}
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="w-full h-48 bg-surface-container rounded-lg border border-outline-variant border-dashed flex flex-col justify-center items-center text-on-surface-variant">
+                      <Upload size={32} className="mb-2 opacity-50" />
+                      <p>Awaiting dataset for Generative UI analysis...</p>
+                    </div>
+                  )}
                 </div>
               </section>
             </>
