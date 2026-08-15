@@ -14,7 +14,7 @@ export const processQuery = async (query: string, data?: any[]): Promise<AIRespo
     
     if (data && data.length > 0) {
       dataSchema = Object.keys(data[0]);
-      sampleData = data.slice(0, 3);
+      sampleData = data.slice(0, 150);
     }
 
     const response = await fetch("/api/chat", {

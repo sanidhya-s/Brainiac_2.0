@@ -64,10 +64,11 @@ export async function POST(req: NextRequest) {
       CRITICAL RULES:
       1. DO NOT always use BarCharts. Vary your visualization types! If showing a distribution or composition, use a PieChart. If showing a trend over time, use a LineChart or AreaChart. If showing multi-variable comparison, use a RadarChart. If showing correlations, use a ScatterChart.
       2. Ensure you mix and match components to build a rich, interactive dashboard layout rather than just a single chart.
-      3. Use InsightCallouts and ProgressBars when relevant to add context to the raw charts.
+      3. ALWAYS provide a textual summary or analysis of the data using 'InsightCallout' or 'Text' components to directly answer the user's prompt with insights!
+      4. DATA AGGREGATION: By default, the frontend injects the raw dataset into charts. However, if the user's query requires aggregating, grouping, or filtering the data (e.g. "Total revenue by region" or "Average NPS"), you MUST calculate the aggregated data yourself based on the sample dataset provided, and pass this new array as a 'data' prop to the specific Chart or DataGrid component.
       
-      Design the most optimal dashboard layout for the user's query: ${query}. Do NOT include the actual full data array in the props. The frontend will automatically inject the full dataset into any Chart or DataGrid component based on the keys you specify. Just specify the keys (e.g. xAxisKey, yAxisKeys, columns).
-      Make the layout look professional, use multiple components! E.g. A top Container with MetricCards, followed by a Card with a Chart, followed by a DataGrid.
+      Design the most optimal dashboard layout for the user's query: ${query}. 
+      Make the layout look professional, use multiple components! E.g. A top Container with MetricCards and InsightCallouts, followed by a Card with a Chart.
       Output valid JSON.
     `;
 

@@ -199,10 +199,10 @@ export default function GenerativeUI({ schema, data }: GenerativeUIProps) {
     return null;
   }
 
-  // Inject full data implicitly into data-aware components
+  // Inject full data implicitly into data-aware components unless the schema provides its own processed data
   const propsWithData = { ...schema.props };
-  if (['BarChart', 'LineChart', 'PieChart', 'DataGrid'].includes(schema.type)) {
-    propsWithData.data = data;
+  if (['BarChart', 'LineChart', 'AreaChart', 'ScatterChart', 'RadarChart', 'PieChart', 'DataGrid'].includes(schema.type)) {
+    propsWithData.data = schema.props?.data || data;
   }
 
   return (

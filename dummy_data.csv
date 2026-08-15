@@ -1,0 +1,19 @@
+Date,Region,Product,Revenue,Users,ChurnRate,NPS,CustomerSegment
+2024-01-01,North America,Pro Plan,15000,1200,5.2,45,Enterprise
+2024-01-01,Europe,Pro Plan,12000,900,4.1,50,Mid-Market
+2024-01-01,Asia,Basic Plan,8000,2000,7.5,35,SMB
+2024-02-01,North America,Pro Plan,17500,1350,4.8,48,Enterprise
+2024-02-01,Europe,Pro Plan,13200,980,3.9,52,Mid-Market
+2024-02-01,Asia,Basic Plan,9500,2300,7.1,38,SMB
+2024-03-01,North America,Pro Plan,19000,1500,4.5,55,Enterprise
+2024-03-01,Europe,Pro Plan,14800,1100,3.5,58,Mid-Market
+2024-03-01,Asia,Basic Plan,11000,2700,6.5,42,SMB
+2024-04-01,North America,Pro Plan,22000,1800,4.0,60,Enterprise
+2024-04-01,Europe,Pro Plan,16500,1250,3.2,65,Mid-Market
+2024-04-01,Asia,Basic Plan,12500,3100,5.8,45,SMB
+2024-05-01,North America,Pro Plan,25000,2100,3.8,62,Enterprise
+2024-05-01,Europe,Pro Plan,18000,1400,2.9,68,Mid-Market
+2024-05-01,Asia,Basic Plan,14000,3500,5.2,50,SMB
+2024-06-01,North America,Pro Plan,28000,2400,3.5,65,Enterprise
+2024-06-01,Europe,Pro Plan,20000,1600,2.7,70,Mid-Market
+2024-06-01,Asia,Basic Plan,16000,4000,4.8,55,SMB
