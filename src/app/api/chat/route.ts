@@ -10,7 +10,7 @@ const uiSchemaDefinition: Schema = {
   properties: {
     type: { 
       type: Type.STRING, 
-      description: "The component type. Must be one of: Container, Text, Card, MetricCard, BarChart, LineChart, PieChart, DataGrid." 
+      description: "The component type. Must be one of: Container, Text, Card, MetricCard, BarChart, LineChart, AreaChart, ScatterChart, RadarChart, PieChart, DataGrid." 
     },
     props: {
       type: Type.OBJECT,
@@ -51,7 +51,9 @@ export async function POST(req: NextRequest) {
       Use 'Container' for layout (props: {'direction': 'vertical' | 'horizontal', 'gap': '1rem' etc}).
       Use 'Text' for descriptions (props: {'content': '...', 'variant': 'h1'|'h2'|'h3'|'p'}).
       Use 'Card' to wrap groups of information nicely.
-      Use 'BarChart', 'LineChart', 'PieChart' for visualizations. Props must include 'xAxisKey' (string) and 'yAxisKeys' (list of strings).
+      Use 'BarChart', 'LineChart', 'AreaChart', 'PieChart' for visualizations. Props must include 'xAxisKey' (string) and 'yAxisKeys' (list of strings).
+      Use 'ScatterChart' for correlations. Props must include 'xAxisKey' and 'yAxisKey'.
+      Use 'RadarChart' for comparative multivariate data. Props must include 'angleAxisKey' and 'radarAxisKeys' (list of strings).
       Use 'DataGrid' for tables. Props must include 'columns' (list of strings).
       Use 'MetricCard' for single value KPIs. Props must include 'title' (string) and 'value' (string or number).
       
